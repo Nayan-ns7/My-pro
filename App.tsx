@@ -4,12 +4,14 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
 import ProjectModal from './components/ProjectModal';
+import ProjectsPage from './components/ProjectsPage';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentView, setCurrentView] = useState<'home' | 'projects'>('home');
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const [stars, setStars] = useState<{top: number, left: number, delay: number}[]>([]);
 
@@ -42,6 +44,16 @@ const App: React.FC = () => {
       gallery: [
         "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?q=80&w=800&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=800&auto=format&fit=crop"
+      ]
+    },
+    {
+      title: "Immersive 3D Portfolio",
+      description: "A gravity-defying architectural visualization platform for creative agencies.",
+      tags: ["WebGL", "GSAP"],
+      image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=800&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
       ]
     }
   ];
@@ -98,7 +110,13 @@ const App: React.FC = () => {
 
   const navigateToHome = () => {
     setMobileMenuOpen(false);
+    setCurrentView('home');
     window.scrollTo(0, 0);
+  };
+
+  const navigateToProjects = () => {
+    setMobileMenuOpen(false);
+    setCurrentView('projects');
   };
 
   // Calculate parallax offset (max 30px shift for float effect)
@@ -161,50 +179,62 @@ const App: React.FC = () => {
       <Navbar 
         scrolled={scrolled} 
         onNavigateHome={navigateToHome} 
+        onNavigateProjects={navigateToProjects}
         theme={theme}
         onToggleTheme={toggleTheme}
       />
       
       <main className="transition-all duration-500 relative z-10">
-        <Hero />
-        
-        {/* Project Section */}
-        <section id="projects" className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-          <div className="mb-16 text-center">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-slate-900 dark:text-white transition-colors">Selected Works</h2>
-            <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, i) => (
-              <div 
-                key={i} 
-                onClick={() => setSelectedProject(project)}
-                className="group bg-white/60 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-primary/50 transition-all shadow-lg dark:shadow-none flex flex-col cursor-pointer hover:-translate-y-2 hover:shadow-2xl"
-              >
-                <div className="h-48 bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
-                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
-                  
-                  {/* View Button Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="bg-white/90 dark:bg-black/80 text-slate-900 dark:text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        View Details
-                      </span>
-                  </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white transition-colors group-hover:text-primary">{project.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 transition-colors flex-1 line-clamp-2">{project.description}</p>
-                  <div className="flex gap-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="text-[10px] px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded uppercase font-bold text-slate-600 dark:text-slate-300 transition-colors">{tag}</span>
-                    ))}
-                  </div>
-                </div>
+        {currentView === 'home' ? (
+          <>
+            <Hero />
+            
+            {/* Project Section (Featured) */}
+            <section id="projects" className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+              <div className="mb-16 text-center">
+                <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-slate-900 dark:text-white transition-colors">Selected Works</h2>
+                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
               </div>
-            ))}
-          </div>
-        </section>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.map((project, i) => (
+                  <div 
+                    key={i} 
+                    onClick={() => setSelectedProject(project)}
+                    className="group bg-white/60 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-primary/50 transition-all shadow-lg dark:shadow-none flex flex-col cursor-pointer hover:-translate-y-2 hover:shadow-2xl"
+                  >
+                    <div className="h-48 bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+                      <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                      
+                      {/* View Button Overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <span className="bg-white/90 dark:bg-black/80 text-slate-900 dark:text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            View Details
+                          </span>
+                      </div>
+                    </div>
+                    <div className="p-6 flex-1 flex flex-col">
+                      <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white transition-colors group-hover:text-primary">{project.title}</h3>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 transition-colors flex-1 line-clamp-2">{project.description}</p>
+                      <div className="flex gap-2">
+                        {project.tags.map((tag) => (
+                          <span key={tag} className="text-[10px] px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded uppercase font-bold text-slate-600 dark:text-slate-300 transition-colors">{tag}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-16 text-center">
+                 <button onClick={navigateToProjects} className="px-8 py-3 rounded-full border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
+                    View All Projects
+                 </button>
+              </div>
+            </section>
+          </>
+        ) : (
+          <ProjectsPage projects={projects} onProjectClick={setSelectedProject} />
+        )}
         <Footer />
       </main>
 
@@ -218,7 +248,7 @@ const App: React.FC = () => {
         className={`fixed inset-0 z-[80] bg-white/95 dark:bg-[#0f1923]/95 backdrop-blur-xl transition-all duration-500 flex flex-col justify-center items-center gap-8 md:hidden ${mobileMenuOpen ? 'opacity-100 pointer-events-auto translate-y-0' : 'opacity-0 pointer-events-none translate-y-10'}`}
       >
           <button onClick={navigateToHome} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Home</button>
-          <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Projects</a>
+          <button onClick={navigateToProjects} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Projects</button>
           <a href="#services" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Services</a>
           <a href="https://wa.me/917906246682" target="_blank" rel="noopener noreferrer" className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Contact</a>
           
@@ -247,3 +277,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+    
