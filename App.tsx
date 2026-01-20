@@ -3,12 +3,10 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
-import Contact from './components/Contact';
 import ProjectModal from './components/ProjectModal';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [currentPage, setCurrentPage] = useState<'home' | 'contact'>('home');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -99,13 +97,6 @@ const App: React.FC = () => {
   };
 
   const navigateToHome = () => {
-    setCurrentPage('home');
-    setMobileMenuOpen(false);
-    window.scrollTo(0, 0);
-  };
-
-  const navigateToContact = () => {
-    setCurrentPage('contact');
     setMobileMenuOpen(false);
     window.scrollTo(0, 0);
   };
@@ -170,58 +161,51 @@ const App: React.FC = () => {
       <Navbar 
         scrolled={scrolled} 
         onNavigateHome={navigateToHome} 
-        onNavigateContact={navigateToContact} 
         theme={theme}
         onToggleTheme={toggleTheme}
       />
       
       <main className="transition-all duration-500 relative z-10">
-        {currentPage === 'home' ? (
-          <>
-            <Hero />
-            
-            {/* Project Section */}
-            <section id="projects" className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-              <div className="mb-16 text-center">
-                <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-slate-900 dark:text-white transition-colors">Selected Works</h2>
-                <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
-              </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projects.map((project, i) => (
-                  <div 
-                    key={i} 
-                    onClick={() => setSelectedProject(project)}
-                    className="group bg-white/60 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-primary/50 transition-all shadow-lg dark:shadow-none flex flex-col cursor-pointer hover:-translate-y-2 hover:shadow-2xl"
-                  >
-                    <div className="h-48 bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
-                      <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
-                      
-                      {/* View Button Overlay */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                         <span className="bg-white/90 dark:bg-black/80 text-slate-900 dark:text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                           View Details
-                         </span>
-                      </div>
-                    </div>
-                    <div className="p-6 flex-1 flex flex-col">
-                      <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white transition-colors group-hover:text-primary">{project.title}</h3>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 transition-colors flex-1 line-clamp-2">{project.description}</p>
-                      <div className="flex gap-2">
-                        {project.tags.map((tag) => (
-                          <span key={tag} className="text-[10px] px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded uppercase font-bold text-slate-600 dark:text-slate-300 transition-colors">{tag}</span>
-                        ))}
-                      </div>
-                    </div>
+        <Hero />
+        
+        {/* Project Section */}
+        <section id="projects" className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+          <div className="mb-16 text-center">
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 text-slate-900 dark:text-white transition-colors">Selected Works</h2>
+            <div className="w-20 h-1 bg-primary mx-auto rounded-full" />
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.map((project, i) => (
+              <div 
+                key={i} 
+                onClick={() => setSelectedProject(project)}
+                className="group bg-white/60 dark:bg-slate-900/40 backdrop-blur-xl border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-primary/50 transition-all shadow-lg dark:shadow-none flex flex-col cursor-pointer hover:-translate-y-2 hover:shadow-2xl"
+              >
+                <div className="h-48 bg-slate-200 dark:bg-slate-800 relative overflow-hidden">
+                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay" />
+                  
+                  {/* View Button Overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <span className="bg-white/90 dark:bg-black/80 text-slate-900 dark:text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        View Details
+                      </span>
                   </div>
-                ))}
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white transition-colors group-hover:text-primary">{project.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-4 transition-colors flex-1 line-clamp-2">{project.description}</p>
+                  <div className="flex gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="text-[10px] px-2 py-1 bg-slate-200 dark:bg-slate-800 rounded uppercase font-bold text-slate-600 dark:text-slate-300 transition-colors">{tag}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
-            </section>
-            <Footer />
-          </>
-        ) : (
-          <Contact onGoHome={navigateToHome} />
-        )}
+            ))}
+          </div>
+        </section>
+        <Footer />
       </main>
 
       {/* Project Gallery Modal */}
@@ -236,7 +220,7 @@ const App: React.FC = () => {
           <button onClick={navigateToHome} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Home</button>
           <a href="#projects" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Projects</a>
           <a href="#services" onClick={() => setMobileMenuOpen(false)} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Services</a>
-          <button onClick={navigateToContact} className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Contact</button>
+          <a href="https://wa.me/917906246682" target="_blank" rel="noopener noreferrer" className="text-3xl font-display font-bold text-slate-900 dark:text-white hover:text-primary transition-colors">Contact</a>
           
           <div className="w-16 h-1 bg-slate-200 dark:bg-slate-800 rounded-full my-4" />
           

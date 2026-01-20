@@ -42,10 +42,10 @@ const Hero: React.FC = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <button className="bg-primary text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 group transition-all hover:scale-105 glow-button">
+            <a href="https://wa.me/917906246682" target="_blank" rel="noopener noreferrer" className="bg-primary text-white px-8 py-4 rounded-xl font-bold flex items-center justify-center gap-2 group transition-all hover:scale-105 glow-button">
               Start Project
               <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
-            </button>
+            </a>
             <button className="px-8 py-4 rounded-xl font-bold border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 transition-all text-slate-900 dark:text-white backdrop-blur-sm">
               View Resume
             </button>

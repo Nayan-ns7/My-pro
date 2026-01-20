@@ -4,12 +4,11 @@ import React from 'react';
 interface NavbarProps {
   scrolled: boolean;
   onNavigateHome: () => void;
-  onNavigateContact: () => void;
   theme: 'dark' | 'light';
   onToggleTheme: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateHome, onNavigateContact, theme, onToggleTheme }) => {
+const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateHome, theme, onToggleTheme }) => {
   return (
     <nav className={`fixed top-0 w-full z-50 px-6 py-4 md:px-12 transition-all duration-300 ${scrolled ? 'backdrop-blur-xl bg-white/80 dark:bg-background-dark/80 border-b border-slate-200 dark:border-slate-800 shadow-xl' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -30,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateHome, onNavigateCon
           <button onClick={onNavigateHome} className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors tracking-wide">Home</button>
           <a href="#projects" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors tracking-wide">Projects</a>
           <a href="#services" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors tracking-wide">Services</a>
-          <button onClick={onNavigateContact} className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors tracking-wide">Contact</button>
+          <a href="https://wa.me/917906246682" target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary transition-colors tracking-wide">Contact</a>
         </div>
 
         <div className="flex items-center gap-4">
@@ -43,12 +42,14 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateHome, onNavigateCon
               {theme === 'dark' ? 'light_mode' : 'dark_mode'}
             </span>
           </button>
-          <button 
-            onClick={onNavigateContact}
+          <a 
+            href="https://wa.me/917906246682"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-gradient-to-r from-primary to-blue-600 hover:from-blue-500 hover:to-primary text-white px-8 py-3 rounded-full font-bold text-sm glow-button transition-all duration-300"
           >
             Hire Me
-          </button>
+          </a>
         </div>
       </div>
     </nav>
