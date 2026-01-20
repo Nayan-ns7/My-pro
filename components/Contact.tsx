@@ -13,36 +13,31 @@ const Contact: React.FC<ContactProps> = ({ onGoHome }) => {
   const formRef = useRef<HTMLFormElement>(null);
 
   // --- GOOGLE FORM CONFIGURATION ---
-  // The URL where the form data is POSTed. Derived from your iframe source.
+  // Submits to the 'formResponse' endpoint of your specific form ID.
   const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeYR_MPEHdxOIPcI7yoW9ro8CnIOwXk_xt32_M9trS3v2hqcg/formResponse";
   
   // --- FIELD MAPPING ---
-  // IMPORTANT: You must replace these placeholder IDs with the actual 'entry.XXXXXX' IDs from your Google Form.
-  // How to find them:
-  // 1. Open your Google Form in edit mode.
-  // 2. Click the three dots (top right) -> "Get pre-filled link".
-  // 3. Fill in dummy data (e.g., "NameTest", "EmailTest").
-  // 4. Click "Get Link", copy it, and paste it into a text editor.
-  // 5. You will see parameters like '&entry.123456=NameTest'. Use those numbers below.
+  // IMPORTANT: Replace these placeholder IDs with your actual Google Form Entry IDs.
+  // To find them: Open your form -> Get pre-filled link -> Fill dummy data -> Get Link -> Inspect the URL parameters.
   const FORM_FIELDS = {
-    name: "entry.2005620554",    // Replace with actual 'Name' field ID
-    email: "entry.1045781291",   // Replace with actual 'Email' field ID
-    subject: "entry.1065046570", // Replace with actual 'Subject' field ID
-    message: "entry.1166974658"  // Replace with actual 'Message' field ID
+    name: "entry.2005620554",    // Name field ID
+    email: "entry.1045781291",   // Email field ID
+    subject: "entry.1065046570", // Subject field ID
+    message: "entry.1166974658"  // Message field ID
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    // We intentionally DO NOT call e.preventDefault().
-    // This allows the form to naturally submit its data to the target iframe.
+    // We intentionally DO NOT call e.preventDefault() here.
+    // This allows the browser to natively submit the form data to the hidden iframe.
     
-    // We create a loading effect. Using a small timeout ensures the submit event 
-    // isn't interrupted by an immediate state re-render.
+    // We set the loading state with a slight delay. This ensures the browser 
+    // captures the input values before React potentially disables them on re-render.
     setTimeout(() => {
       setIsSubmitting(true);
-    }, 50);
+    }, 10);
 
-    // Since we can't detect when the cross-origin iframe finishes loading, 
-    // we simulate a success delay (1.5 seconds) then show the success message.
+    // Since we cannot detect the load event of a cross-origin iframe reliably,
+    // we simulate a success response after 1.5 seconds.
     setTimeout(() => {
       setSubmitted(true);
       setIsSubmitting(false);
