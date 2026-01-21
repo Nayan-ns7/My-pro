@@ -55,6 +55,26 @@ const App: React.FC = () => {
         "https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=800&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop"
       ]
+    },
+    {
+      title: "NeonGym Fitness",
+      description: "Premium fitness infrastructure platform featuring biometric tracking and elite performance scheduling.",
+      tags: ["Next.js", "Tailwind", "Framer"],
+      image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=800&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1574680096141-1cddd32e011e?q=80&w=800&auto=format&fit=crop"
+      ]
+    },
+    {
+      title: "Visionix AI Platform",
+      description: "Enterprise computer vision system for automated quality assurance and safety monitoring.",
+      tags: ["Python", "OpenCV", "React"],
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
+      gallery: [
+        "https://images.unsplash.com/photo-1535378437327-10ff28d885a1?q=80&w=800&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=800&auto=format&fit=crop"
+      ]
     }
   ];
 
@@ -277,4 +297,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-    
