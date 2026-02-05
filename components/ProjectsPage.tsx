@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface Project {
   title: string;
@@ -15,9 +15,34 @@ interface ProjectsPageProps {
 }
 
 const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, onProjectClick }) => {
+  const [isSleeping, setIsSleeping] = useState(false);
+  const lastScrollY = useRef(0);
+
   // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  // Handle scroll for cat animation
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Threshold to prevent jitter
+      if (Math.abs(currentScrollY - lastScrollY.current) > 5) {
+        if (currentScrollY > lastScrollY.current) {
+            // Scrolling Down -> Sleep
+            setIsSleeping(true);
+        } else {
+            // Scrolling Up -> Wake
+            setIsSleeping(false);
+        }
+        lastScrollY.current = currentScrollY;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -29,9 +54,84 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, onProjectClick })
         <h1 className="font-display text-5xl md:text-7xl font-bold text-slate-900 dark:text-white mb-6 transition-colors">
           All <span className="text-primary">Works</span>
         </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed mb-8">
           A comprehensive collection of digital experiences, applications, and technical experiments crafted with precision.
         </p>
+        
+        {/* Animated Cat Separator */}
+        <div className="relative h-20 w-full flex justify-center items-end mt-8 mb-4">
+            {/* Cat Container */}
+            <div className="absolute bottom-[2px] z-10 transition-all duration-500 ease-in-out">
+                {/* Awake Cat */}
+                <div className={`transition-all duration-500 transform origin-bottom ${isSleeping ? 'opacity-0 scale-75 translate-y-4' : 'opacity-100 scale-100 translate-y-0'}`}>
+                    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            {`
+                            .tail-wag { animation: tailWag 3s ease-in-out infinite; transform-origin: 45px 45px; }
+                            .blink-eyes { animation: blink 4s infinite; transform-origin: center; }
+                            @keyframes tailWag { 0%, 100% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } }
+                            @keyframes blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
+                            `}
+                        </style>
+                        {/* Tail */}
+                        <path d="M45 45C45 45 52 35 52 25C52 15 45 10 45 10" stroke="#94a3b8" strokeWidth="3" strokeLinecap="round" className="tail-wag dark:stroke-slate-400"/>
+                        {/* Body */}
+                        <path d="M20 50C20 50 15 35 25 30C35 25 45 45 40 50" fill="white" stroke="#334155" strokeWidth="2" strokeLinejoin="round"/>
+                        {/* Head */}
+                        <circle cx="30" cy="22" r="14" fill="white" stroke="#334155" strokeWidth="2"/>
+                        {/* Ears */}
+                        <path d="M18 16L20 6L30 12" fill="white" stroke="#334155" strokeWidth="2" strokeLinejoin="round"/>
+                        <path d="M42 16L40 6L30 12" fill="white" stroke="#334155" strokeWidth="2" strokeLinejoin="round"/>
+                        {/* Face */}
+                        <g className="blink-eyes">
+                            <circle cx="25" cy="20" r="2" fill="#1e293b"/>
+                            <circle cx="35" cy="20" r="2" fill="#1e293b"/>
+                            <circle cx="26" cy="19" r="0.5" fill="white"/>
+                            <circle cx="36" cy="19" r="0.5" fill="white"/>
+                        </g>
+                        <path d="M28 26C28 26 29 27 30 26C31 27 32 26 32 26" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
+                        {/* Pink Cheeks */}
+                        <circle cx="22" cy="24" r="1.5" fill="#f472b6" opacity="0.6"/>
+                        <circle cx="38" cy="24" r="1.5" fill="#f472b6" opacity="0.6"/>
+                    </svg>
+                </div>
+                
+                {/* Sleeping Cat */}
+                <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 transition-all duration-500 transform origin-bottom ${isSleeping ? 'opacity-100 scale-100 translate-y-1' : 'opacity-0 scale-90 -translate-y-2'}`}>
+                     <svg width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <style>
+                            {`
+                            .snooze-z { animation: floatZ 2.5s ease-out infinite; opacity: 0; }
+                            .snooze-z-2 { animation: floatZ 2.5s ease-out infinite 0.8s; opacity: 0; }
+                            .breathe { animation: breathe 3s ease-in-out infinite; }
+                            @keyframes floatZ { 0% { transform: translate(0,0) scale(0.5); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(15px, -15px) scale(1.2); opacity: 0; } }
+                            @keyframes breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.05); } }
+                            `}
+                        </style>
+                        {/* Tail Curled */}
+                        <path d="M48 30C52 30 55 25 50 15" stroke="#94a3b8" strokeWidth="3" strokeLinecap="round" className="dark:stroke-slate-400"/>
+                        {/* Body Loaf */}
+                        <ellipse cx="30" cy="25" rx="20" ry="12" fill="white" stroke="#334155" strokeWidth="2" className="breathe"/>
+                        {/* Head Low */}
+                        <circle cx="20" cy="22" r="11" fill="white" stroke="#334155" strokeWidth="2"/>
+                        {/* Ears Flat */}
+                        <path d="M10 16L12 10L18 14" fill="white" stroke="#334155" strokeWidth="2" strokeLinejoin="round"/>
+                        <path d="M22 14L28 10L30 16" fill="white" stroke="#334155" strokeWidth="2" strokeLinejoin="round"/>
+                        {/* Closed Eyes */}
+                        <path d="M15 22C15 22 16 23 17 22" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
+                        <path d="M23 22C23 22 24 23 25 22" stroke="#1e293b" strokeWidth="1.5" strokeLinecap="round"/>
+                        {/* Zzz Animation */}
+                        <g transform="translate(40, 10)">
+                            <path d="M0 5L5 5L0 10L5 10" stroke="#359EFF" strokeWidth="1.5" className="snooze-z"/>
+                            <path d="M8 -5L12 -5L8 0L12 0" stroke="#359EFF" strokeWidth="1.5" className="snooze-z-2"/>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            
+            {/* The Line */}
+            <div className="w-24 h-[2px] bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -69,4 +169,3 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, onProjectClick })
 };
 
 export default ProjectsPage;
-    
